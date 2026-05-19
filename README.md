@@ -7,18 +7,19 @@
 
 <style>
 :root{
-  --primary:#2ecc71;
-  --dark:#0f172a;
-  --glass:rgba(255,255,255,0.1);
-  --blur:blur(12px);
+  --primary:#22c55e;
+  --secondary:#06b6d4;
+  --accent:#facc15;
+  --bg:#f8fafc;
+  --text:#0f172a;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  color:#fff;
+  background:linear-gradient(135deg,#e0f2fe,#f0fdf4,#fef9c3);
+  color:var(--text);
   min-height:100vh;
 }
 
@@ -26,12 +27,12 @@ body{
 nav{
   position:sticky;
   top:0;
-  backdrop-filter:var(--blur);
-  background:rgba(15,23,42,0.6);
+  background:rgba(255,255,255,0.7);
+  backdrop-filter:blur(10px);
   display:flex;
   justify-content:space-between;
   padding:15px 20px;
-  z-index:10;
+  border-bottom:1px solid rgba(0,0,0,0.05);
 }
 
 .logo{
@@ -42,18 +43,18 @@ nav{
 
 /* BUTTON */
 button{
-  background:linear-gradient(135deg,#2ecc71,#27ae60);
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
   border:none;
   padding:10px 16px;
-  border-radius:8px;
+  border-radius:10px;
   color:white;
   cursor:pointer;
   transition:0.3s;
 }
 
 button:hover{
-  transform:translateY(-2px) scale(1.03);
-  box-shadow:0 10px 20px rgba(0,0,0,0.3);
+  transform:translateY(-2px) scale(1.05);
+  box-shadow:0 10px 20px rgba(0,0,0,0.15);
 }
 
 /* SECTIONS */
@@ -65,17 +66,16 @@ section{
 
 /* CARDS */
 .card{
-  background:var(--glass);
-  backdrop-filter:var(--blur);
+  background:white;
   border-radius:16px;
   padding:20px;
   margin:15px 0;
   transition:0.3s;
-  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
 }
 
 .card:hover{
-  transform:translateY(-5px);
+  transform:translateY(-5px) scale(1.01);
 }
 
 /* GRID */
@@ -88,30 +88,29 @@ section{
 /* INPUT */
 input,select{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:10px 0;
-  border-radius:8px;
-  border:none;
+  border-radius:10px;
+  border:1px solid #e2e8f0;
 }
 
 /* LOGIN SCREEN */
 #loginScreen{
   position:fixed;
   inset:0;
-  background:linear-gradient(135deg,#0f172a,#020617);
+  background:linear-gradient(135deg,#22c55e,#06b6d4,#facc15);
   display:flex;
   justify-content:center;
   align-items:center;
-  z-index:100;
 }
 
 .login-box{
-  background:var(--glass);
-  backdrop-filter:var(--blur);
+  background:white;
   padding:30px;
-  border-radius:16px;
+  border-radius:20px;
   width:300px;
   text-align:center;
+  box-shadow:0 20px 40px rgba(0,0,0,0.2);
 }
 
 /* MOBILE */
@@ -174,7 +173,6 @@ const products=[
 {name:"Paint",price:25}
 ];
 
-/* LOGIN */
 function login(){
   const user=document.getElementById("username").value;
   if(!user) return alert("Enter username");
@@ -193,18 +191,16 @@ function init(){
 }
 init();
 
-/* PRODUCTS */
 function loadProducts(){
   let grid="",select="";
   products.forEach(p=>{
-    grid+=`<div class="card">${p.name}<br>GHS ${p.price}</div>`;
+    grid+=`<div class="card">${p.name}<br><strong>GHS ${p.price}</strong></div>`;
     select+=`<option>${p.name}</option>`;
   });
   document.getElementById("products").innerHTML=grid;
   document.getElementById("product").innerHTML=select;
 }
 
-/* ORDER */
 function order(){
   let product=document.getElementById("product").value;
   let qty=document.getElementById("qty").value;
@@ -221,7 +217,6 @@ function order(){
   showOrders();
 }
 
-/* SHOW ORDERS */
 function showOrders(){
   let orders=JSON.parse(localStorage.getItem("orders")||"[]");
   let html="",total=0;
@@ -235,7 +230,7 @@ function showOrders(){
   document.getElementById("stats").innerText="Total Revenue: GHS "+total;
 }
 
-/* PWA INSTALL */
+/* INSTALL */
 let deferredPrompt;
 const installBtn=document.getElementById("installBtn");
 
@@ -259,7 +254,7 @@ short_name:"TrashTiger",
 start_url:".",
 display:"standalone",
 background_color:"#ffffff",
-theme_color:"#2ecc71",
+theme_color:"#22c55e",
 icons:[{
 src:"https://cdn-icons-png.flaticon.com/512/2909/2909767.png",
 sizes:"192x192",
