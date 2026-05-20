@@ -163,7 +163,6 @@
             opacity: 0;
             pointer-events: none;
             transform: scale(1.03);
-            display: none !important;
         }
 
         .auth-container {
@@ -312,7 +311,7 @@
            4. MAIN SaaS CONTAINER LAYOUT ARCHITECTURE
            ========================================================================== */
         .app-shell {
-            display: none;
+            display: flex;
             flex-direction: column;
             min-height: 100vh;
             opacity: 0;
@@ -320,7 +319,6 @@
         }
 
         .app-shell.ready {
-            display: flex;
             opacity: 1;
         }
 
@@ -616,7 +614,33 @@
 
     <div id="notification-center"></div>
 
-    <nav class="navbar">
+    <div class="auth-overlay" id="authGate">
+        <div class="auth-container">
+            <div class="auth-brand">
+                <i data-lucide="aperture" style="width: 28px; height: 28px; color: var(--primary);"></i> Trash Tiger
+            </div>
+            <p class="auth-tagline">Access the premium circular economy dashboard</p>
+
+            <form id="gateForm" onsubmit="executeSessionAuth(event)">
+                <div class="input-group">
+                    <label class="input-label">Operator Key Identifier</label>
+                    <div class="field-shell">
+                        <input type="text" id="operatorName" class="premium-input" placeholder="Enter name or identity..." required>
+                        <i data-lucide="shield"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-action">
+                    <span>Initialize Interface</span>
+                    <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="app-shell" id="appInterface">
+        
+        <nav class="navbar">
             <div class="nav-brand">
                 <i data-lucide="aperture" style="width: 24px; height: 24px; color: var(--primary);"></i>
                 <span>Trash Tiger</span>
@@ -699,3 +723,275 @@
         </footer>
 
     </div>
+
+    <script>
+        // High-Quality Global Products Pipeline State Configuration
+        const productMatrix = [
+            { id: "egg_trays", name: "Premium Egg Trays", price: 15 },
+            { id: "paper", name: "Recycled Industrial Paper", price: 10 },
+            { id: "toilet_paper", name: "Eco Fine Toilet Paper", price: 8 },
+            { id: "paint", name: "Refined Reclaimed Paint", price: 25 }
+        ];
+
+        // Core App Context Instantiation Object
+        let sessionOperator = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            verifyActiveSessionLog();
+        });
+
+        /**
+         * Validates operational session validation layers
+         */
+        function verifyActiveSessionLog() {
+            const currentSession = localStorage.getItem("trash_tiger_session");
+            if (currentSession) {
+                sessionOperator = currentSession;
+                bootDashboardShell();
+            }
+        }
+
+        /**
+         * Transitions UI state gracefully into operational hub viewport
+         */
+        function executeSessionAuth(event) {
+            event.preventDefault();
+            const operatorVal = document.getElementById("operatorName").value.trim();
+            if (!operatorVal) return;
+
+            localStorage.setItem("trash_tiger_session", operatorVal);
+            sessionOperator = operatorVal;
+            
+            dispatchSystemToast("Identity verification metrics validated successfully.", "success");
+            bootDashboardShell();
+        }
+
+        /**
+         * Initializes structural layout components inside active dashboard shell
+         */
+        function bootDashboardShell() {
+            document.getElementById("authGate").classList.add("hidden");
+            const mainInterface = document.getElementById("appInterface");
+            mainInterface.classList.add("ready");
+
+            document.getElementById("userGreeting").innerText = `Welcome back, ${sessionOperator}`;
+            
+            renderProductCatalog();
+            rehydrateTelemetryStream();
+        }
+
+        /**
+         * Revokes active authorization matrix tokens and triggers environment view resets
+         */
+        function terminateSession() {
+            localStorage.removeItem("trash_tiger_session");
+            sessionOperator = null;
+            
+            document.getElementById("authGate").classList.remove("hidden");
+            document.getElementById("appInterface").classList.remove("ready");
+            dispatchSystemToast("Secure session lifecycle completed.", "success");
+        }
+
+        /**
+         * Compiles and outputs micro-interaction nodes safely inside semantic components
+         */
+        function renderProductCatalog() {
+            const gridContainer = document.getElementById("productGridPipeline");
+            const selectDropdown = document.getElementById("orderProductSelect");
+            
+            let gridBuffer = "";
+            let selectBuffer = "";
+
+            productMatrix.forEach(item => {
+                gridBuffer += `
+                    <div class="premium-card">
+                        <div class="product-meta-header">
+                            <span class="product-tag">Verified Resource</span>
+                            <span class="price-tag">GHS ${item.price}</span>
+                        </div>
+                        <h4 style="font-family: var(--font-heading); font-size: 16px; font-weight:700;">${item.name}</h4>
+                        <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">Premium circular commodity asset node.</p>
+                    </div>
+                `;
+                selectBuffer += `<option value="${item.id}">${item.name}</option>`;
+            });
+
+            gridContainer.innerHTML = gridBuffer;
+            selectDropdown.innerHTML = selectBuffer;
+        }
+
+        /**
+         * Dynamic State Management: Injects orders and builds WhatsApp automation endpoints
+         */
+        function handleOrderSubmission(event) {
+            event.preventDefault();
+            const chosenProductId = document.getElementById("orderProductSelect").value;
+            const targetQty = parseInt(document.getElementById("orderQuantity").value);
+
+            if (!targetQty || targetQty <= 0) {
+                dispatchSystemToast("Invalid quantity metric parameter selected.", "error");
+                return;
+            }
+
+            const activeProductObj = productMatrix.find(p => p.id === chosenProductId);
+            const absoluteCostCalculation = activeProductObj.price * targetQty;
+
+            const existingOrdersArray = JSON.parse(localStorage.getItem("trash_tiger_orders") || "[]");
+            existingOrdersArray.push({
+                name: activeProductObj.name,
+                qty: targetQty,
+                total: absoluteCostCalculation
+            });
+
+            localStorage.setItem("trash_tiger_orders", JSON.stringify(existingOrdersArray));
+            
+            // Build absolute formatted secure link communication protocols
+            const messageString = encodeURIComponent(`Order Placement Verification Protocol:\nCommodity: ${activeProductObj.name}\nVolume Units: ${targetQty}\nCalculated Total Valuation: GHS ${absoluteCostCalculation}`);
+            window.open(`https://wa.me/233591808780?text=${messageString}`, '_blank');
+
+            document.getElementById("orderQuantity").value = "";
+            dispatchSystemToast("Log metrics successfully transmitted via dispatch loop.", "success");
+            rehydrateTelemetryStream();
+        }
+
+        /**
+         * Updates visual table modules dynamically from localStorage data
+         */
+        function rehydrateTelemetryStream() {
+            const currentOrdersList = JSON.parse(localStorage.getItem("trash_tiger_orders") || "[]");
+            const streamContainer = document.getElementById("telemetryStreamBody");
+            const metricDisplayBox = document.getElementById("revenueMetricDisplay");
+
+            if (currentOrdersList.length === 0) {
+                streamContainer.innerHTML = `<tr><td colspan="3" class="empty-indicator">No data telemetry blocks processed inside stream logs.</td></tr>`;
+                metricDisplayBox.innerText = "GHS 0.00";
+                return;
+            }
+
+            let streamRowsHtml = "";
+            let overallRevenueCounter = 0;
+
+            currentOrdersList.forEach(log => {
+                overallRevenueCounter += log.total;
+                streamRowsHtml += `
+                    <tr>
+                        <td style="font-weight: 500; color: var(--text-main);">${log.name}</td>
+                        <td style="color: var(--text-muted); font-weight: 500;">x${log.qty}</td>
+                        <td style="color: var(--primary); font-weight: 600;">GHS ${log.total}</td>
+                    </tr>
+                `;
+            });
+
+            streamContainer.innerHTML = streamRowsHtml;
+            metricDisplayBox.innerText = `GHS ${overallRevenueCounter.toFixed(2)}`;
+        }
+
+        /**
+         * Shifts theme settings seamlessly with automatic hardware styling tracking hooks
+         */
+        function toggleColorPalette() {
+            const activeTheme = document.documentElement.getAttribute("data-theme");
+            const targetMode = activeTheme === "light" ? "dark" : "light";
+            
+            document.documentElement.setAttribute("data-theme", targetMode);
+            const elementIconNode = document.getElementById("paletteIcon");
+            
+            if (targetMode === "light") {
+                elementIconNode.setAttribute("data-lucide", "moon");
+            } else {
+                elementIconNode.setAttribute("data-lucide", "sun");
+            }
+            
+            lucide.createIcons();
+            dispatchSystemToast(`Interface visual context updated to ${targetMode.toUpperCase()} layer.`, "success");
+        }
+
+        /**
+         * Dispatches rich custom toast components dynamically into viewport notifications
+         */
+        function dispatchSystemToast(message, type = "success") {
+            const pipelineNotificationBox = document.getElementById("notification-center");
+            const alertElement = document.createElement("div");
+            alertElement.className = "live-toast";
+            
+            const activeLucideIconSignature = type === "success" ? "check-circle" : "alert-triangle";
+
+            alertElement.innerHTML = `
+                <i data-lucide="${activeLucideIconSignature}" class="toast-status-icon ${type}"></i>
+                <span style="font-size: 13px; font-weight: 500; color: var(--text-main);">${message}</span>
+            `;
+
+            pipelineNotificationBox.appendChild(alertElement);
+            lucide.createIcons();
+
+            setTimeout(() => alertElement.classList.add("visible"), 40);
+
+            setTimeout(() => {
+                alertElement.classList.remove("visible");
+                setTimeout(() => alertElement.remove(), 450);
+            }, 3500);
+        }
+
+        /* ==========================================================================
+           8. PWA SPECIFICATION & LIFE-CYCLE SERVICE PIPELINE CONFIGURATION
+           ========================================================================== */
+        let applicationInstallPrompt;
+        const mainPwaInstallButton = document.getElementById("pwaInstallBtn");
+
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            applicationInstallPrompt = event;
+            mainPwaInstallButton.style.display = "flex";
+        });
+
+        mainPwaInstallButton.onclick = async () => {
+            if (applicationInstallPrompt) {
+                applicationInstallPrompt.prompt();
+                applicationInstallPrompt = null;
+                mainPwaInstallButton.style.display = "none";
+            }
+        };
+
+        const manifestAssetDataObject = {
+            name: "Trash Tiger Platform",
+            short_name: "TrashTiger",
+            start_url: ".",
+            display: "standalone",
+            background_color: "#060814",
+            theme_color: "#10b981",
+            icons: [{
+                src: "https://cdn-icons-png.flaticon.com/512/2909/2909767.png",
+                sizes: "192x192",
+                type: "image/png"
+            }]
+        };
+
+        const inlineBlobManifestUrl = URL.createObjectURL(new Blob([JSON.stringify(manifestAssetDataObject)], { type: "application/json" }));
+        const customManifestLinkElement = document.createElement("link");
+        customManifestLinkElement.rel = "manifest";
+        customManifestLinkElement.href = inlineBlobManifestUrl;
+        document.head.appendChild(customManifestLinkElement);
+
+        const backgroundServiceWorkerBinaryBlob = new Blob([`
+            self.addEventListener('install', e => self.skipWaiting());
+            self.addEventListener('fetch', e => {
+                e.respondWith(
+                    caches.open('trash_tiger_v1_cache').then(cache =>
+                        cache.match(e.request).then(response =>
+                            response || fetch(e.request).then(networkPayload => {
+                                cache.put(e.request, networkPayload.clone());
+                                return networkPayload;
+                            })
+                        )
+                    )
+                );
+            });
+        `], { type: "text/javascript" });
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register(URL.createObjectURL(backgroundServiceWorkerBinaryBlob));
+        }
+    </script>
+</body>
+</html>
