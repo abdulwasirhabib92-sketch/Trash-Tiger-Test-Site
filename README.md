@@ -163,6 +163,7 @@
             opacity: 0;
             pointer-events: none;
             transform: scale(1.03);
+            display: none !important;
         }
 
         .auth-container {
@@ -311,7 +312,7 @@
            4. MAIN SaaS CONTAINER LAYOUT ARCHITECTURE
            ========================================================================== */
         .app-shell {
-            display: flex;
+            display: none;
             flex-direction: column;
             min-height: 100vh;
             opacity: 0;
@@ -319,6 +320,7 @@
         }
 
         .app-shell.ready {
+            display: flex;
             opacity: 1;
         }
 
@@ -613,202 +615,3 @@
     <div class="ambient-orb-2"></div>
 
     <div id="notification-center"></div>
-
-    <div class="auth-overlay" id="authGate">
-        <div class="auth-container">
-            <div class="auth-brand">
-                <i data-lucide="aperture" style="width: 28px; height: 28px; color: var(--primary);"></i> Trash Tiger
-            </div>
-            <p class="auth-tagline">Access the premium circular economy dashboard</p>
-
-            <form id="gateForm" onsubmit="executeSessionAuth(event)">
-                <div class="input-group">
-                    <label class="input-label">Operator Key Identifier</label>
-                    <div class="field-shell">
-                        <input type="text" id="operatorName" class="premium-input" placeholder="Enter name or identity..." required>
-                        <i data-lucide="shield"></i>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-action">
-                    <span>Initialize Interface</span>
-                    <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <div class="app-shell" id="appInterface">
-        
-        <nav class="navbar">
-            <div class="nav-brand">
-                <i data-lucide="aperture" style="width: 24px; height: 24px; color: var(--primary);"></i>
-                <span>Trash Tiger</span>
-            </div>
-            <div class="nav-actions">
-                <button id="pwaInstallBtn" class="btn-install" style="display: none;">
-                    <i data-lucide="download"></i> Install Hub App
-                </button>
-                <button class="icon-utility-btn" onclick="toggleColorPalette()" title="Shift Visual Spectrum">
-                    <i data-lucide="sun" id="paletteIcon"></i>
-                </button>
-                <button class="icon-utility-btn" onclick="terminateSession()" title="Revoke Authentication Session">
-                    <i data-lucide="log-out"></i>
-                </button>
-            </div>
-        </nav>
-
-        <main class="workspace-grid">
-            
-            <header class="welcome-hero">
-                <h1 id="userGreeting">System Environment Overview</h1>
-                <p>Track metrics, analyze outputs, and order verified circular ecosystem commodities seamlessly.</p>
-            </header>
-
-            <section>
-                <h2 style="font-family: var(--font-heading); font-size: 20px; margin-bottom: 20px;">Premium Commodities</h2>
-                <div id="productGridPipeline" class="responsive-panel-grid"></div>
-            </section>
-
-            <div class="split-dashboard-layout">
-                
-                <section class="premium-card" style="height: fit-content;">
-                    <h3 style="font-family: var(--font-heading); font-size: 18px; margin-bottom: 20px;">Procure Allocation</h3>
-                    <form onsubmit="handleOrderSubmission(event)">
-                        <div class="input-group">
-                            <label class="input-label">Select Resource Node</label>
-                            <select id="orderProductSelect" class="premium-select"></select>
-                        </div>
-                        <div class="input-group">
-                            <label class="input-label">Target Quantity (Units)</label>
-                            <div class="field-shell">
-                                <input type="number" id="orderQuantity" class="premium-input" style="padding-left: 16px;" placeholder="0" min="1" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-action">
-                            <i data-lucide="shopping-bag" style="width: 16px; height: 16px;"></i>
-                            <span>Transmit via WhatsApp</span>
-                        </button>
-                    </form>
-                </section>
-
-                <section class="premium-card">
-                    <h3 style="font-family: var(--font-heading); font-size: 18px;">Telemetry Stream Logs</h3>
-                    
-                    <div class="table-viewport">
-                        <table class="saas-table">
-                            <thead>
-                                <tr>
-                                    <th>Commodity</th>
-                                    <th>Volume</th>
-                                    <th>Value Estimation</th>
-                                </tr>
-                            </thead>
-                            <tbody id="telemetryStreamBody"></tbody>
-                        </table>
-                    </div>
-
-                    <div class="revenue-badge">
-                        <span style="font-size: 14px; color: var(--text-muted); font-weight: 500;">Aggregated Allocation Stream</span>
-                        <span id="revenueMetricDisplay" style="font-family: var(--font-heading); font-weight: 800; font-size: 18px; color: var(--primary);">GHS 0.00</span>
-                    </div>
-                </section>
-
-            </div>
-
-        </main>
-
-        <footer class="saas-footer">
-            <p>Trash Tiger Logistics Core Systems Enterprise &copy; 2026. Powered by <span>Suleiman Alhassan.</span></p>
-        </footer>
-
-    </div>
-
-    <script>
-        // High-Quality Global Products Pipeline State Configuration
-        const productMatrix = [
-            { id: "egg_trays", name: "Premium Egg Trays", price: 15 },
-            { id: "paper", name: "Recycled Industrial Paper", price: 10 },
-            { id: "toilet_paper", name: "Eco Fine Toilet Paper", price: 8 },
-            { id: "paint", name: "Refined Reclaimed Paint", price: 25 }
-        ];
-
-        // Core App Context Instantiation Object
-        let sessionOperator = null;
-
-        document.addEventListener("DOMContentLoaded", () => {
-            lucide.createIcons();
-            verifyActiveSessionLog();
-        });
-
-        /**
-         * Validates operational session validation layers
-         */
-        function verifyActiveSessionLog() {
-            const currentSession = localStorage.getItem("trash_tiger_session");
-            if (currentSession) {
-                sessionOperator = currentSession;
-                bootDashboardShell();
-            }
-        }
-
-        /**
-         * Transitions UI state gracefully into operational hub viewport
-         */
-        function executeSessionAuth(event) {
-            event.preventDefault();
-            const operatorVal = document.getElementById("operatorName").value.trim();
-            if (!operatorVal) return;
-
-            localStorage.setItem("trash_tiger_session", operatorVal);
-            sessionOperator = operatorVal;
-            
-            dispatchSystemToast("Identity verification metrics validated successfully.", "success");
-            bootDashboardShell();
-        }
-
-        /**
-         * Initializes structural layout components inside active dashboard shell
-         */
-        function bootDashboardShell() {
-            document.getElementById("authGate").classList.add("hidden");
-            const mainInterface = document.getElementById("appInterface");
-            mainInterface.classList.add("ready");
-
-            document.getElementById("userGreeting").innerText = `Welcome back, ${sessionOperator}`;
-            
-            renderProductCatalog();
-            rehydrateTelemetryStream();
-        }
-
-        /**
-         * Revokes active authorization matrix tokens and triggers environment view resets
-         */
-        function terminateSession() {
-            localStorage.removeItem("trash_tiger_session");
-            sessionOperator = null;
-            
-            document.getElementById("authGate").classList.remove("hidden");
-            document.getElementById("appInterface").classList.remove("ready");
-            dispatchSystemToast("Secure session lifecycle completed.", "success");
-        }
-
-        /**
-         * Compiles and outputs micro-interaction nodes safely inside semantic components
-         */
-        function renderProductCatalog() {
-            const gridContainer = document.getElementById("productGridPipeline");
-            const selectDropdown = document.getElementById("orderProductSelect");
-            
-            let gridBuffer = "";
-            let selectBuffer = "";
-
-            productMatrix.forEach(item => {
-                gridBuffer += `
-                    <div class="premium-card">
-                        <div class="product-meta-header">
-                            <span class="product-tag">Verified Resource</span>
-                            <span class="price-tag">GHS ${item.price}</span>
-                        </div>
-                        <h4 style="font-family: var(--font-heading); font-size: 16px; font-weight:700;">${item.name}</h4>
-                        <p style="color: var(--text-muted); font-size: 12px; margin-top:
